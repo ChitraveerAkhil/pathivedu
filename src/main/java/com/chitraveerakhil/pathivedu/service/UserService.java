@@ -1,10 +1,19 @@
 package com.chitraveerakhil.pathivedu.service;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
-import com.chitraveerakhil.pathivedu.model.User;
+import com.chitraveerakhil.pathivedu.vo.UserProfile;
 
 public interface UserService {
-	User user() throws NoSuchAlgorithmException, InvalidKeySpecException;
+
+	UserProfile fetchUserProfileById(long id);
+
+	UserProfile updateUser(UserProfile user);
+
+	String deleteUser(long id);
+
+	List<UserProfile> fetchUserList();
+
+	UserProfile addUser(UserProfile userProfile, String password);
+
 }

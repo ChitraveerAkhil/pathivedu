@@ -1,0 +1,83 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+   http://www.liquibase.org/xml/ns/dbchangelog 
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+	<changeSet author="akhil" id="1.0">
+		<createTable tableName="user">
+			<column name="id" type="INT" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="email" type="VARCHAR(2048)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="hash" type="VARCHAR(2048)" />
+			<column name="salt" type="VARCHAR(2048)" />
+			<column name="iterator" type="INT" />
+			<column name="is_active" type="BOOLEAN" />
+		</createTable>
+
+		<createTable tableName="user_detail">
+			<column name="user_id" type="INT">
+				<constraints primaryKey="true"
+					foreignKeyName="fk_user_prof_user_id" references="user(id)" />
+			</column>
+			<column name="first_name" type="VARCHAR(128)" />
+			<column name="last_name" type="VARCHAR(128)" />
+			<column name="manager_id" type="INT"/>
+			<column name="phone_number" type="VARCHAR(12)"/>
+			<column name="designation" type="VARCHAR(32)" />
+			<column name="salary" type="DOUBLE" />
+			<column name="is_manager" type="BOOLEAN" />
+			<column name="is_admin" type="BOOLEAN" />
+		</createTable>
+
+		<createTable tableName="leaves_alotted">
+			<column name="user_id" type="INT">
+				<constraints primaryKey="true"
+					foreignKeyName="fk_alot_emp_id" references="user(id)" />
+			</column>
+			<column name="planned_leave" type="INT" />
+			<column name="sick_leave" type="INT" />
+			<column name="casual_leave" type="INT" />
+			<column name="comp_off" type="INT" />
+		</createTable>
+
+		<createTable tableName="leave_request">
+			<column name="id" type="INT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="user_id" type="INT">
+				<constraints foreignKeyName="fk_req_emp_id"
+					references="user(id)" />
+			</column>
+			<column name="status" type="BOOLEAN" />
+			<column name="leave_type" type="VARCHAR(128)"/>
+			<column name="is_comp_off" type="BOOLEAN" />
+			<column name="applied_on" type="DATE" />
+			<column name="leave_from" type="DATE" />
+			<column name="leave_to" type="DATE" />
+			<column name="reason" type="CLOB(4096)" />
+			<column name="approved_by" type="VARCHAR(256)" />
+		</createTable>
+
+		<createTable tableName="over_time_request">
+			<column name="id" type="INT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="user_id" type="INT">
+				<constraints foreignKeyName="fk_over_time_req_emp_id"
+					references="user(id)" />
+			</column>
+			<column name="applied_on" type="DATE" />
+			<column name="over_time_date" type="DATE" />
+			<column name="over_time_period" type="INT" />
+			<column name="approved_by" type="VARCHAR(256)" />
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>
