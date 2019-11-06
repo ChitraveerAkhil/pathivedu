@@ -3,7 +3,6 @@ package com.chitraveerakhil.pathivedu.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,10 +38,10 @@ public class UserDetail {
 	@Column(name = "IS_MANAGER")
 	private boolean isManager;
 
+	@Column(name = "SALARY")
 	private long salary;
-
+	
 	@OneToOne
-	@JoinColumn(name = "user_id")
 	@MapsId
 	private User user;
 
