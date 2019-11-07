@@ -1,7 +1,5 @@
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
    http://www.liquibase.org/xml/ns/dbchangelog 
@@ -15,6 +13,9 @@
 			<column name="email" type="VARCHAR(2048)">
 				<constraints unique="true" nullable="false" />
 			</column>
+			<column name="phone_number" type="VARCHAR(12)">
+				<constraints unique="true" nullable="false" />
+			</column>
 			<column name="hash" type="VARCHAR(2048)" />
 			<column name="salt" type="VARCHAR(2048)" />
 			<column name="iterator" type="INT" />
@@ -23,23 +24,27 @@
 
 		<createTable tableName="user_detail">
 			<column name="user_id" type="INT">
-				<constraints primaryKey="true"
-					foreignKeyName="fk_user_prof_user_id" references="user(id)" />
+				<constraints primaryKey="true" foreignKeyName="fk_user_prof_user_id"
+					references="user(id)" />
 			</column>
 			<column name="first_name" type="VARCHAR(128)" />
 			<column name="last_name" type="VARCHAR(128)" />
-			<column name="manager_id" type="INT"/>
-			<column name="phone_number" type="VARCHAR(12)"/>
+			<column name="manager_id" type="INT" />
 			<column name="designation" type="VARCHAR(32)" />
 			<column name="salary" type="DOUBLE" />
 			<column name="is_manager" type="BOOLEAN" />
 			<column name="is_admin" type="BOOLEAN" />
+			<column name="dob" type="DATE" />
+			<column name="resident_address" type="BLOB" />
+			<column name="permanent_address" type="BLOB" />
+			<column name="resident_city" type="VARCHAR(128)" />
+			<column name="resident_locality" type="VARCHAR(128)" />
 		</createTable>
 
 		<createTable tableName="leaves_alotted">
 			<column name="user_id" type="INT">
-				<constraints primaryKey="true"
-					foreignKeyName="fk_alot_emp_id" references="user(id)" />
+				<constraints primaryKey="true" foreignKeyName="fk_alot_emp_id"
+					references="user(id)" />
 			</column>
 			<column name="planned_leave" type="INT" />
 			<column name="sick_leave" type="INT" />
@@ -52,11 +57,10 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="user_id" type="INT">
-				<constraints foreignKeyName="fk_req_emp_id"
-					references="user(id)" />
+				<constraints foreignKeyName="fk_req_emp_id" references="user(id)" />
 			</column>
 			<column name="status" type="BOOLEAN" />
-			<column name="leave_type" type="VARCHAR(128)"/>
+			<column name="leave_type" type="VARCHAR(128)" />
 			<column name="is_comp_off" type="BOOLEAN" />
 			<column name="applied_on" type="DATE" />
 			<column name="leave_from" type="DATE" />

@@ -33,9 +33,7 @@ public class UserDetail {
 	@Column(name = "LAST_NAME")
 	private String lastName;
 
-	@Column(name = "PHONE_NUMBER")
-	private String phoneNumber;
-
+	@Column(name = "DESIGNATION")
 	private String designation;
 
 	@Column(name = "MANAGER_ID")
@@ -58,10 +56,10 @@ public class UserDetail {
 
 	@Column(name = "PERMANENT_ADDRESS")
 	private String permanentAddress;
-	
+
 	@Column(name = "RESIDENT_LOCALITY")
 	private String residentLocality;
-	
+
 	@Column(name = "RESIDENT_CITY")
 	private String residentCity;
 

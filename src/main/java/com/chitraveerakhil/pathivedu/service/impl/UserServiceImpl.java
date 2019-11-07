@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
 		userDetail.setLastName(userProfile.getLastName());
 		userDetail.setManager(userProfile.isManager());
 		userDetail.setManagerId(0);
-		userDetail.setPhoneNumber(userProfile.getPhoneNumber());
 		userDetail.setSalary(userProfile.getSalary());
 		userDetail.setPermanentAddress(userProfile.getPermanentAddress());
 		userDetail.setResidentAddress(userProfile.getResidentAddress());
