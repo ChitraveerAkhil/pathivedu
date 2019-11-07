@@ -33,8 +33,7 @@ public class UserController {
 
 	@PostMapping("add")
 	public PathiveduResponse<UserProfile> addUser(@RequestBody UserProfileAndPass userProfileAndPass) {
-		UserProfile userProfile = userService.addUser(userProfileAndPass.getUserProfile(),
-				userProfileAndPass.getPassword());
+		UserProfile userProfile = userService.addUser(userProfileAndPass);
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 

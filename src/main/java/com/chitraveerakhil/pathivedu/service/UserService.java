@@ -3,6 +3,7 @@ package com.chitraveerakhil.pathivedu.service;
 import java.util.List;
 
 import com.chitraveerakhil.pathivedu.vo.UserProfile;
+import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 
 public interface UserService {
 
@@ -14,6 +15,6 @@ public interface UserService {
 
 	List<UserProfile> fetchUserList();
 
-	UserProfile addUser(UserProfile userProfile, String password);
+	UserProfile addUser(UserProfileAndPass userProfileAndPass);
 
 }

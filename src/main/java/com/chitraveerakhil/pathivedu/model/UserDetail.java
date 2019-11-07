@@ -1,8 +1,12 @@
 package com.chitraveerakhil.pathivedu.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -15,8 +19,13 @@ import lombok.Data;
 public class UserDetail {
 
 	@Id
-	@Column(name = "USER_ID")
+	@Column(name = "user_id", unique = true, nullable = false)
 	private long userId;
+
+	@MapsId
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_ID")
+	private User user;
 
 	@Column(name = "FIRST_NAME")
 	private String firstName;
@@ -40,9 +49,20 @@ public class UserDetail {
 
 	@Column(name = "SALARY")
 	private long salary;
+
+	@Column(name = "DOB")
+	private Date dob;
+
+	@Column(name = "RESIDENT_ADDRESS")
+	private String residentAddress;
+
+	@Column(name = "PERMANENT_ADDRESS")
+	private String permanentAddress;
 	
-	@OneToOne
-	@MapsId
-	private User user;
+	@Column(name = "RESIDENT_LOCALITY")
+	private String residentLocality;
+	
+	@Column(name = "RESIDENT_CITY")
+	private String residentCity;
 
 }

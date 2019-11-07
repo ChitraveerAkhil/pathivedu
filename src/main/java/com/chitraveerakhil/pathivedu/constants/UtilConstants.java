@@ -1,5 +1,10 @@
 package com.chitraveerakhil.pathivedu.constants;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class UtilConstants {
 
 	public static final String REPOSITORY_LOCATION = "com.chitraveerakhil.pathivedu.repository";
@@ -9,5 +14,22 @@ public class UtilConstants {
 	public static final String KEY_ITERATOR = "iterator";
 	public static final String KEY_HASH = "hash";
 	public static final String KEY_SALT = "salt";
+	private static final String DATE_FORMAT = "yyyy-mm-dd";
+
+	public static String dateToStr(Date dob) {
+		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		return dateFormat.format(dob);
+	}
+
+	public static Date strToDate(String date) {
+		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		Date retrnDate = null;
+		try {
+			retrnDate = dateFormat.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return retrnDate;
+	}
 
 }

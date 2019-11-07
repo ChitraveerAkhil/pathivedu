@@ -16,4 +16,9 @@ public class UserProfile {
 	private boolean isManager;
 	private long salary;
 	private boolean isActive;
+	private String dob;
+	private String residentAddress;
+	private String permanentAddress;
+	private String residentLocality;
+	private String residentCity;
 }
