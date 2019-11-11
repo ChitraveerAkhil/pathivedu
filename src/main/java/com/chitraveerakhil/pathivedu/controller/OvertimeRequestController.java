@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chitraveerakhil.pathivedu.model.OverTimeRequest;
-import com.chitraveerakhil.pathivedu.model.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.service.OvertimeRequestService;
+import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 
 @RestController
 @RequestMapping("overtime/")

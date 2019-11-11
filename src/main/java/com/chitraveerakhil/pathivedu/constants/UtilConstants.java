@@ -15,6 +15,9 @@ public class UtilConstants {
 	public static final String KEY_HASH = "hash";
 	public static final String KEY_SALT = "salt";
 	private static final String DATE_FORMAT = "yyyy-mm-dd";
+	public static final String STR_GET = "get";
+	public static final String STR_SET = "set";
+	public static final String STR_IS = "is";
 
 	public static String dateToStr(Date dob) {
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

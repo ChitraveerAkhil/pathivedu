@@ -1,4 +1,4 @@
-package com.chitraveerakhil.pathivedu.hleper;
+package com.chitraveerakhil.pathivedu.helper;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;

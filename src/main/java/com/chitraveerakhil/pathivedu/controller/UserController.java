@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chitraveerakhil.pathivedu.model.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.service.UserService;
+import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.vo.UserProfile;
 import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 

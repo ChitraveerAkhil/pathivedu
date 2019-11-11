@@ -1,17 +1,30 @@
 package com.chitraveerakhil.pathivedu.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Getter
-@Setter
-@AllArgsConstructor
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "LEAVES_ALOTTED")
 public class LeavesAlotted {
 
+	@Id
+	@Column(name = "USER_ID", unique = true, nullable = false)
 	private long userId;
-	private int casualLeave;
-	private int sickLeave;
+
+	@Column(name = "PLANNED_LEAVE")
 	private int plannedLeave;
-	private int religiousLeave;
+
+	@Column(name = "SICK_LEAVE")
+	private int sickLeave;
+	
+	@Column(name = "CASUAL_LEAVE")
+	private int casualLeave;
+
+	@Column(name = "COMP_OFF")
+	private int compOff;
 }

@@ -35,10 +35,10 @@
 			<column name="is_manager" type="BOOLEAN" />
 			<column name="is_admin" type="BOOLEAN" />
 			<column name="dob" type="DATE" />
-			<column name="resident_address" type="BLOB" />
-			<column name="permanent_address" type="BLOB" />
-			<column name="resident_city" type="VARCHAR(128)" />
-			<column name="resident_locality" type="VARCHAR(128)" />
+			<column name="resident_address" type="VARCHAR(500)" />
+			<column name="permanent_address" type="VARCHAR()" />
+			<column name="resident_city" type="VARCHAR(90)" />
+			<column name="resident_locality" type="VARCHAR(90)" />
 		</createTable>
 
 		<createTable tableName="leaves_alotted">
@@ -59,14 +59,13 @@
 			<column name="user_id" type="INT">
 				<constraints foreignKeyName="fk_req_emp_id" references="user(id)" />
 			</column>
-			<column name="status" type="BOOLEAN" />
-			<column name="leave_type" type="VARCHAR(128)" />
-			<column name="is_comp_off" type="BOOLEAN" />
+			<column name="status" type="VARCHAR(18)" />
+			<column name="leave_type" type="VARCHAR(18)" />
 			<column name="applied_on" type="DATE" />
 			<column name="leave_from" type="DATE" />
 			<column name="leave_to" type="DATE" />
-			<column name="reason" type="CLOB(4096)" />
-			<column name="approved_by" type="VARCHAR(256)" />
+			<column name="reason" type="VARCHAR(2048)" />
+			<column name="approved_by" type="INT" />
 		</createTable>
 
 		<createTable tableName="over_time_request">
@@ -77,6 +76,7 @@
 				<constraints foreignKeyName="fk_over_time_req_emp_id"
 					references="user(id)" />
 			</column>
+			<column name="status" type="VARCHAR(18)" />
 			<column name="applied_on" type="DATE" />
 			<column name="over_time_date" type="DATE" />
 			<column name="over_time_period" type="INT" />

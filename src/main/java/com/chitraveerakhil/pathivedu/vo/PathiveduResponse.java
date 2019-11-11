@@ -1,4 +1,4 @@
-package com.chitraveerakhil.pathivedu.model;
+package com.chitraveerakhil.pathivedu.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

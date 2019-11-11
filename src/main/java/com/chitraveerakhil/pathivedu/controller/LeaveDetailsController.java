@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chitraveerakhil.pathivedu.model.LeaveRequest;
-import com.chitraveerakhil.pathivedu.model.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.service.LeaveRequestService;
+import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 
 @RestController
 @RequestMapping("leaves/")
