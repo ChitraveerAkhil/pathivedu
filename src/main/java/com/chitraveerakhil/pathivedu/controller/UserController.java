@@ -3,7 +3,6 @@ package com.chitraveerakhil.pathivedu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,29 +23,49 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping("profileList")
+	@PostMapping("createAdmin")
+	public PathiveduResponse<UserProfile> createAdmin(@RequestBody UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = userService.createAdmin(userProfileAndPass);
+		return new PathiveduResponse<UserProfile>(userProfile);
+	}
+
+	@PostMapping("createManager")
+	public PathiveduResponse<?> createManager(@RequestBody UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = userService.createManager(userProfileAndPass);
+		PathiveduResponse<?> response = null;
+		if (userProfile != null) {
+			response = new PathiveduResponse<UserProfile>(userProfile);
+		} else {
+			response = new PathiveduResponse<String>("error", "Unable to create manager", "401",
+					"Manager can be created only by Admin");
+		}
+		return response;
+	}
+
+	@PostMapping("add")
+	public PathiveduResponse<?> addUser(@RequestBody UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = userService.addUser(userProfileAndPass);
+		PathiveduResponse<?> response = null;
+		if (userProfile != null) {
+			response = new PathiveduResponse<UserProfile>(userProfile);
+		} else {
+			response = new PathiveduResponse<String>("error", "Unable to create user", "401",
+					"User can be created only by Admin or Manager");
+		}
+		return response;
+	}
+
+	@GetMapping("fetchById")
 	public PathiveduResponse<UserProfile> fetchUserProfile(@RequestParam long id) {
 		UserProfile userProfile = userService.fetchUserProfileById(id);
 
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 
-	@PostMapping("add")
-	public PathiveduResponse<UserProfile> addUser(@RequestBody UserProfileAndPass userProfileAndPass) {
-		UserProfile userProfile = userService.addUser(userProfileAndPass);
-		return new PathiveduResponse<UserProfile>(userProfile);
-	}
-
 	@PutMapping("update")
-	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfile user) {
-		UserProfile userProfile = userService.updateUser(user);
+	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = userService.updateUser(userProfileAndPass);
 		return new PathiveduResponse<UserProfile>(userProfile);
-	}
-
-	@DeleteMapping("delete")
-	public PathiveduResponse<String> deleteUser(@RequestParam long id) {
-		String resp = userService.deleteUser(id);
-		return new PathiveduResponse<String>(resp);
 	}
 
 	@GetMapping("fetchAll")

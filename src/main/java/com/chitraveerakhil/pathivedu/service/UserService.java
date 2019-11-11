@@ -9,12 +9,14 @@ public interface UserService {
 
 	UserProfile fetchUserProfileById(long id);
 
-	UserProfile updateUser(UserProfile user);
-
-	String deleteUser(long id);
-
 	List<UserProfile> fetchUserList();
 
 	UserProfile addUser(UserProfileAndPass userProfileAndPass);
+
+	UserProfile createAdmin(UserProfileAndPass userProfileAndPass);
+
+	UserProfile createManager(UserProfileAndPass userProfileAndPass);
+
+	UserProfile updateUser(UserProfileAndPass userProfileAndPass);
 
 }

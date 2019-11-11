@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "USER")
 public class User {
@@ -21,16 +23,16 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private long id;
-	
+
 	@Column(name = "EMAIL")
 	private String email;
-	
+
 	@Column(name = "PHONE_NUMBER")
 	private String phoneNumber;
 
 	@Column(name = "SALT")
 	private String salt;
-	
+
 	@Column(name = "HASH")
 	private String hash;
 

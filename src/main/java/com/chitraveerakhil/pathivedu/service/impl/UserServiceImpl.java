@@ -1,16 +1,15 @@
 package com.chitraveerakhil.pathivedu.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
-import com.chitraveerakhil.pathivedu.hleper.SecurePassword;
-import com.chitraveerakhil.pathivedu.hleper.VoPopulator;
+import com.chitraveerakhil.pathivedu.helper.SecurePassword;
+import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.User;
 import com.chitraveerakhil.pathivedu.model.UserDetail;
 import com.chitraveerakhil.pathivedu.repository.UserDetailRepository;
@@ -29,34 +28,86 @@ public class UserServiceImpl implements UserService {
 	UserDetailRepository userDetailRepository;
 
 	@Override
-	public UserProfile fetchUserProfileById(long id) {
-		return null;
+	public UserProfile createAdmin(UserProfileAndPass userProfileAndPass) {
+		User user = populateUser(userProfileAndPass);
+		UserDetail userDetail = populateUserDetail(userProfileAndPass);
+		userDetail.setAdmin(true);
+		userDetail.setManager(true);
+		UserProfile userProfile = saveUser(user, userDetail);
+		return userProfile;
 	}
 
-	private static final Logger Log = LoggerFactory.getLogger(UserServiceImpl.class);
+	@Override
+	public UserProfile createManager(UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = null;
+		User user = populateUser(userProfileAndPass);
+		UserDetail userDetail = populateUserDetail(userProfileAndPass);
+		userDetail.setAdmin(false);
+		userDetail.setManager(true);
+
+		userProfile = saveUser(user, userDetail);
+		return userProfile;
+	}
 
 	@Override
 	public UserProfile addUser(UserProfileAndPass userProfileAndPass) {
-		Log.debug("Adding user " + userProfileAndPass.getUserProfile());
-		VoPopulator<UserProfile, User> userPopulator = new VoPopulator<>();
-		User user = new User();
-		user = userPopulator.populateObject(userProfileAndPass.getUserProfile(), user);
-		securePassword(userProfileAndPass.getPassword(), user);
+		User manager = userRepository.getOne(userProfileAndPass.getUserProfile().getManagerId());
+		UserProfile userProfile = null;
+		if (manager.getUserDetail().isManager() || manager.getUserDetail().isAdmin()) {
+			User user = populateUser(userProfileAndPass);
+			UserDetail userDetail = populateUserDetail(userProfileAndPass);
+			userDetail.setAdmin(false);
+			userDetail.setManager(false);
+			userProfile = saveUser(user, userDetail);
+		}
+		return userProfile;
+	}
 
-		UserDetail userDetail = new UserDetail();
-		VoPopulator<UserProfile, UserDetail> userDetailPopulator = new VoPopulator<>();
-		userDetailPopulator.populateObject(userProfileAndPass.getUserProfile(), userDetail);
+	@Override
+	public UserProfile fetchUserProfileById(long id) {
+		UserProfile userProfile = new UserProfile();
+		User user = userRepository.getOne(id);
+		extractUserProfileResponse(user, userProfile);
 
+		return userProfile;
+	}
+
+	@Override
+	public UserProfile updateUser(UserProfileAndPass userProfileAndPass) {
+		User user = userRepository.findById(userProfileAndPass.getUserProfile().getUserId()).get();
+		user = populateUser(userProfileAndPass);
+		user.setId(userProfileAndPass.getUserProfile().getUserId());
+		UserDetail userDetail = user.getUserDetail();
+		userDetail = populateUserDetail(userProfileAndPass);
 		user.setUserDetail(userDetail);
 		userDetail.setUser(user);
 		user = userRepository.save(user);
 
-		Log.debug("New User Added::" + user);
+		UserProfile userProfile = new UserProfile();
+		extractUserProfileResponse(user, userProfile);
+		return userProfile;
+	}
+
+	@Override
+	public List<UserProfile> fetchUserList() {
+		List<User> users = userRepository.findAll();
+		List<UserProfile> userProfileList = new ArrayList<>();
+		users.forEach(user -> {
+			UserProfile userProfile = new UserProfile();
+			extractUserProfileResponse(user, userProfile);
+			userProfileList.add(userProfile);
+		});
+		return userProfileList;
+	}
+
+	private UserProfile saveUser(User user, UserDetail userDetail) {
+		user.setUserDetail(userDetail);
+		userDetail.setUser(user);
+		user = userRepository.save(user);
 
 		UserProfile userProfile = new UserProfile();
 
 		extractUserProfileResponse(user, userProfile);
-
 		return userProfile;
 	}
 
@@ -66,33 +117,27 @@ public class UserServiceImpl implements UserService {
 
 		userProfileFromUserPopulator.populateObject(user, userProfile);
 		userProfileFromUserDetailPopulator.populateObject(user.getUserDetail(), userProfile);
-
-		Log.debug(userProfile.toString());
 	}
 
-	public void securePassword(String password, User user) {
+	private UserDetail populateUserDetail(UserProfileAndPass userProfileAndPass) {
+		UserDetail userDetail = new UserDetail();
+		VoPopulator<UserProfile, UserDetail> userDetailPopulator = new VoPopulator<>();
+		userDetailPopulator.populateObject(userProfileAndPass.getUserProfile(), userDetail);
+		return userDetail;
+	}
+
+	private User populateUser(UserProfileAndPass userProfileAndPass) {
+		VoPopulator<UserProfile, User> userPopulator = new VoPopulator<>();
+		User user = new User();
+		user = userPopulator.populateObject(userProfileAndPass.getUserProfile(), user);
+		securePassword(userProfileAndPass.getPassword(), user);
+		return user;
+	}
+
+	private void securePassword(String password, User user) {
 		Map<String, String> generatedPassword = SecurePassword.generateHashedPassword(password);
 		user.setHash(generatedPassword.get(UtilConstants.KEY_HASH));
 		user.setIterator(Integer.valueOf(generatedPassword.get((UtilConstants.KEY_ITERATOR))));
 		user.setSalt(generatedPassword.get(UtilConstants.KEY_SALT));
 	}
-
-	@Override
-	public UserProfile updateUser(UserProfile user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String deleteUser(long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<UserProfile> fetchUserList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
