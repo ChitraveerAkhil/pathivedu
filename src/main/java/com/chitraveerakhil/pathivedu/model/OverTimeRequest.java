@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.chitraveerakhil.pathivedu.vo.RequestStatus;
+
 import lombok.Data;
 
 @Data
@@ -42,4 +44,9 @@ public class OverTimeRequest {
 	@Column(name = "APPROVED_BY")
 	private long approvedBy;
 
+	@Column(name = "LAST_UPDATE")
+	private Date lastUpdate;
+
+	@Column(name = "REASON")
+	private String reason;
 }

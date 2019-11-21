@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chitraveerakhil.pathivedu.model.OverTimeRequest;
-import com.chitraveerakhil.pathivedu.service.OvertimeRequestService;
+import com.chitraveerakhil.pathivedu.service.OverTimeRequestService;
+import com.chitraveerakhil.pathivedu.vo.OverTimeVo;
+import com.chitraveerakhil.pathivedu.vo.PathiveduRequest;
 import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 
 @RestController
@@ -21,29 +22,29 @@ import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 public class OvertimeRequestController {
 
 	@Autowired
-	OvertimeRequestService overtimeRequestService;
+	OverTimeRequestService overTimeRequestService;
 
 	@GetMapping("fetchByUser")
-	public PathiveduResponse<List<OverTimeRequest>> fetchByUser(long id) {
-		List<OverTimeRequest> overtimeRequest = overtimeRequestService.fetchOverTimeByUser();
+	public PathiveduResponse<List<OverTimeVo>> fetchByUser(@RequestParam("userId") long id) {
+		List<OverTimeVo> response = overTimeRequestService.fetchOverTimesByUser(id);
+		return new PathiveduResponse<>(response);
+	}
+
+	@PostMapping
+	public PathiveduResponse<OverTimeVo> requestOverTime(@RequestBody PathiveduRequest<OverTimeVo> toAddRequest) {
+		OverTimeVo overtimeRequest = overTimeRequestService.addOverTime(toAddRequest);
 		return new PathiveduResponse<>(overtimeRequest);
 	}
 
-	@PostMapping("request")
-	public PathiveduResponse<OverTimeRequest> requestLeave(@RequestBody OverTimeRequest toAddRequest) {
-		OverTimeRequest overtimeRequest = overtimeRequestService.addOverTime(toAddRequest);
+	@PutMapping
+	public PathiveduResponse<OverTimeVo> editLeave(@RequestBody PathiveduRequest<OverTimeVo> toEditRequest) {
+		OverTimeVo overtimeRequest = overTimeRequestService.editOverTime(toEditRequest);
 		return new PathiveduResponse<>(overtimeRequest);
 	}
 
-	@PutMapping("edit")
-	public PathiveduResponse<OverTimeRequest> editLeave(@RequestBody OverTimeRequest toEditRequest) {
-		OverTimeRequest overtimeRequest = overtimeRequestService.editOverTime(toEditRequest);
-		return new PathiveduResponse<>(overtimeRequest);
-	}
-
-	@DeleteMapping("delete")
-	public PathiveduResponse<String> requestLeave(@RequestParam long id) {
-		String resp = overtimeRequestService.deleteOverTime(id);
+	@DeleteMapping
+	public PathiveduResponse<String> deleteLeave(@RequestParam("userId") PathiveduRequest<Long> id) {
+		String resp = overTimeRequestService.deleteOverTime(id);
 		return new PathiveduResponse<>(resp);
 	}
 }

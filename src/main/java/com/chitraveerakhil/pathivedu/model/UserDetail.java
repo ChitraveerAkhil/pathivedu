@@ -11,11 +11,10 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+
+@Data
 @Entity
 @Table(name = "USER_DETAIL")
 public class UserDetail {

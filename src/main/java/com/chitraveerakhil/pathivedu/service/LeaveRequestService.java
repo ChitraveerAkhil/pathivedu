@@ -2,16 +2,17 @@ package com.chitraveerakhil.pathivedu.service;
 
 import java.util.List;
 
-import com.chitraveerakhil.pathivedu.model.LeaveRequest;
+import com.chitraveerakhil.pathivedu.vo.LeaveVo;
+import com.chitraveerakhil.pathivedu.vo.PathiveduRequest;
 
 public interface LeaveRequestService {
 
-	List<LeaveRequest> fetchLeavesByUser();
+	LeaveVo addLeave(PathiveduRequest<LeaveVo> toAddRequest);
 
-	LeaveRequest addLeave(LeaveRequest toAddRequest);
+	LeaveVo editLeave(PathiveduRequest<LeaveVo> toEditRequest);
 
-	LeaveRequest editLeave(LeaveRequest toEditRequest);
+	List<LeaveVo> fetchLeavesByUser(long userId);
 
-	String deleteLeave(long id);
+	String deleteLeave(PathiveduRequest<Long> request);
 
 }

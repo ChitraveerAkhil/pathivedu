@@ -55,16 +55,16 @@ public class UserController {
 		return response;
 	}
 
+	@PutMapping("update")
+	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfileAndPass userProfileAndPass) {
+		UserProfile userProfile = userService.updateUser(userProfileAndPass);
+		return new PathiveduResponse<UserProfile>(userProfile);
+	}
+	
 	@GetMapping("fetchById")
 	public PathiveduResponse<UserProfile> fetchUserProfile(@RequestParam long id) {
 		UserProfile userProfile = userService.fetchUserProfileById(id);
 
-		return new PathiveduResponse<UserProfile>(userProfile);
-	}
-
-	@PutMapping("update")
-	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfileAndPass userProfileAndPass) {
-		UserProfile userProfile = userService.updateUser(userProfileAndPass);
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 

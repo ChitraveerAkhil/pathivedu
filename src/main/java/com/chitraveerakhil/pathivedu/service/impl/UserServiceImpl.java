@@ -64,15 +64,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserProfile fetchUserProfileById(long id) {
-		UserProfile userProfile = new UserProfile();
-		User user = userRepository.getOne(id);
-		extractUserProfileResponse(user, userProfile);
-
-		return userProfile;
-	}
-
-	@Override
 	public UserProfile updateUser(UserProfileAndPass userProfileAndPass) {
 		User user = userRepository.findById(userProfileAndPass.getUserProfile().getUserId()).get();
 		user = populateUser(userProfileAndPass);
@@ -89,6 +80,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserProfile fetchUserProfileById(long id) {
+		UserProfile userProfile = new UserProfile();
+		User user = userRepository.getOne(id);
+		extractUserProfileResponse(user, userProfile);
+
+		return userProfile;
+	}
+
+	@Override
 	public List<UserProfile> fetchUserList() {
 		List<User> users = userRepository.findAll();
 		List<UserProfile> userProfileList = new ArrayList<>();
@@ -98,6 +98,14 @@ public class UserServiceImpl implements UserService {
 			userProfileList.add(userProfile);
 		});
 		return userProfileList;
+	}
+
+
+	private UserDetail populateUserDetail(UserProfileAndPass userProfileAndPass) {
+		UserDetail userDetail = new UserDetail();
+		VoPopulator<UserProfile, UserDetail> userDetailPopulator = new VoPopulator<>();
+		userDetailPopulator.populateObject(userProfileAndPass.getUserProfile(), userDetail);
+		return userDetail;
 	}
 
 	private UserProfile saveUser(User user, UserDetail userDetail) {
@@ -117,13 +125,6 @@ public class UserServiceImpl implements UserService {
 
 		userProfileFromUserPopulator.populateObject(user, userProfile);
 		userProfileFromUserDetailPopulator.populateObject(user.getUserDetail(), userProfile);
-	}
-
-	private UserDetail populateUserDetail(UserProfileAndPass userProfileAndPass) {
-		UserDetail userDetail = new UserDetail();
-		VoPopulator<UserProfile, UserDetail> userDetailPopulator = new VoPopulator<>();
-		userDetailPopulator.populateObject(userProfileAndPass.getUserProfile(), userDetail);
-		return userDetail;
 	}
 
 	private User populateUser(UserProfileAndPass userProfileAndPass) {

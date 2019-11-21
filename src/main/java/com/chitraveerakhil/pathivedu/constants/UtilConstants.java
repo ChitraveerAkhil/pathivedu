@@ -18,6 +18,9 @@ public class UtilConstants {
 	public static final String STR_GET = "get";
 	public static final String STR_SET = "set";
 	public static final String STR_IS = "is";
+	public static final String ENUM_APPROVED = "APPROVED";
+	public static final String ENUM_DENIED = "DENIED";
+	public static final String ENUM_PENDING = "PENDING";
 
 	public static String dateToStr(Date dob) {
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

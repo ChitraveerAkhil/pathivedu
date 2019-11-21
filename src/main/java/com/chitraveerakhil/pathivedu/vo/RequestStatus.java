@@ -1,4 +1,4 @@
-package com.chitraveerakhil.pathivedu.model;
+package com.chitraveerakhil.pathivedu.vo;
 
 public enum RequestStatus {
 	PENDING, APPROVED, DENIED

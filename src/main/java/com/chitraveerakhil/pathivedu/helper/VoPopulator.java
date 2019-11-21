@@ -51,11 +51,13 @@ public class VoPopulator<T, R> {
 
 			if (getMethod.getReturnType().equals(Date.class) && setMethod.getParameterTypes()[0].equals(String.class)) {
 				Object object = getMethod.invoke(origin);
-				setMethod.invoke(populated, UtilConstants.dateToStr((Date) object));
+				if (object != null)
+					setMethod.invoke(populated, UtilConstants.dateToStr((Date) object));
 			} else if (getMethod.getReturnType().equals(String.class)
 					&& setMethod.getParameterTypes()[0].equals(Date.class)) {
 				Object object = getMethod.invoke(origin);
-				setMethod.invoke(populated, UtilConstants.strToDate((String) object));
+				if (object != null)
+					setMethod.invoke(populated, UtilConstants.strToDate((String) object));
 			} else {
 				Object object = getMethod.invoke(origin);
 				setMethod.invoke(populated, object);

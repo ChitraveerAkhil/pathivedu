@@ -11,11 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.chitraveerakhil.pathivedu.vo.LeaveType;
+import com.chitraveerakhil.pathivedu.vo.RequestStatus;
+
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "LEAVES_REQUEST")
+@Table(name = "LEAVE_REQUEST")
 public class LeaveRequest {
 
 	@Id
@@ -23,17 +26,16 @@ public class LeaveRequest {
 	@Column(name = "ID", unique = true, nullable = false)
 	private long id;
 
-	@Column(name = "USER_ID", unique = true, nullable = false)
+	@Column(name = "USER_ID", nullable = false)
 	private long userId;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
 	private RequestStatus status;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LEAVE_TYPE")
 	private LeaveType leaveType;
-
 
 	@Column(name = "APPLIED_ON")
 	private Date appliedOn;
@@ -49,4 +51,8 @@ public class LeaveRequest {
 
 	@Column(name = "APPROVED_BY")
 	private Long approvedBy;
+
+	@Column(name = "LAST_UPDATE")
+	private Date lastUpdate;
+
 }

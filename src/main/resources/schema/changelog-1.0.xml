@@ -84,4 +84,75 @@
 		</createTable>
 	</changeSet>
 
+	<changeSet author="akhil" id="1.1">
+		<createTable tableName="leave_history">
+			<column name="id" type="INT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="leave_id" type="INT">
+				<constraints foreignKeyName="fk_leave_history_unique_id"
+					references="leave_request(id)" />
+			</column>
+			<column name="updated_on" type="DATE" />
+			<column name="changes_done" type="VARCHAR(4096)" />
+			<column name="from_date_before" type="DATE" />
+			<column name="to_date_before" type="DATE" />
+			<column name="from_date_after" type="DATE" />
+			<column name="to_date_after" type="DATE" />
+			<column name="changed_by" type="INT" />
+		</createTable>
+		<createTable tableName="over_time_history">
+			<column name="id" type="INT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="over_time_id" type="INT">
+				<constraints foreignKeyName="over_time_request_history_unique_id"
+					references="over_time_request(id)" />
+			</column>
+			<column name="updated_on" type="DATE" />
+			<column name="changes_done" type="VARCHAR(4096)" />
+			<column name="from_date_before" type="DATE" />
+			<column name="to_data_before" type="DATE" />
+			<column name="from_date_after" type="DATE" />
+			<column name="to_date_after" type="DATE" />
+			<column name="changed_by" type="INT" />
+		</createTable>
+		<addColumn tableName="leave_request">
+			<column name="last_update" type="DATE" />
+		</addColumn>
+		<addColumn tableName="over_time_request">
+			<column name="last_update" type="DATE" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="1.2" author="akhil">
+		<dropColumn tableName="over_time_history">
+			<column name="from_date_before" type="DATE" />
+		</dropColumn>
+		<dropColumn tableName="over_time_history">
+			<column name="to_data_before" type="DATE" />
+		</dropColumn>
+		<dropColumn tableName="over_time_history">
+			<column name="from_date_after" type="DATE" />
+		</dropColumn>
+		<dropColumn tableName="over_time_history">
+			<column name="to_date_after" type="DATE" />
+		</dropColumn>
+		<addColumn tableName="over_time_history">
+			<column name="over_time_date_before" type="DATE" />
+		</addColumn>
+		<addColumn tableName="over_time_history">
+			<column name="over_time_period_before" type="INT" />
+		</addColumn>
+		<addColumn tableName="over_time_history">
+			<column name="over_time_date_after" type="DATE" />
+		</addColumn>
+		<addColumn tableName="over_time_history">
+			<column name="over_time_period_after" type="INT" />
+		</addColumn>
+		<addColumn tableName="over_time_request">
+			<column name="reason" type="VARCHAR(4096)"></column>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>
