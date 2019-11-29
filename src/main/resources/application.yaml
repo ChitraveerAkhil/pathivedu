@@ -1,21 +1,22 @@
 spring:
    jpa:
-      show-sql: "true"
+      show-sql: 'true'
       properties:
-         hibernate: 
-            generate-statistics: "true"
-            format-sql: "true"
+         hibernate:
+            generate-statistics: 'true'
+            format-sql: 'true'
       hibernate:
-         ddl-auto: "update"
-   
-   liquibase.change-log: "classpath:schema/changelog-master.xml"
-   
-   datasource: 
-      driver-class-name: "org.h2.Driver"
-      url: "jdbc:h2:~/pathivedu"
-      username: "user"
-      password: "pass"
-      
+         ddl-auto: update
+   liquibase.change-log: classpath:schema/changelog-master.xml
+   redis:
+      port: 6379
+      host: localhost
+      password: ''
+   datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:~/pathivedu
+      username: user
+      password: pass
 logging:
    level:
-      org.hibernate.stat: "true"
+      org.hibernate.stat: 'true'

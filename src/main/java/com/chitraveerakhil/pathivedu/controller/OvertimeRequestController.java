@@ -18,7 +18,7 @@ import com.chitraveerakhil.pathivedu.vo.PathiveduRequest;
 import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 
 @RestController
-@RequestMapping("overtime/")
+@RequestMapping("overtime")
 public class OvertimeRequestController {
 
 	@Autowired
