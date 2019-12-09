@@ -1,10 +1,16 @@
 package com.chitraveerakhil.pathivedu.vo;
 
+import javax.persistence.Id;
+
+import org.springframework.data.redis.core.RedisHash;
+
 import lombok.Data;
 
 @Data
+@RedisHash("leave_vo")
 public class LeaveVo {
 
+	@Id
 	private long leaveId;
 	private long userId;
 	private String leaveFrom;

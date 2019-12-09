@@ -1,10 +1,16 @@
 package com.chitraveerakhil.pathivedu.vo;
 
+import javax.persistence.Id;
+
+import org.springframework.data.redis.core.RedisHash;
+
 import lombok.Data;
 
 @Data
+@RedisHash("user_profile")
 public class UserProfile {
 
+	@Id
 	private long userId;
 	private String email;
 	private String firstName;

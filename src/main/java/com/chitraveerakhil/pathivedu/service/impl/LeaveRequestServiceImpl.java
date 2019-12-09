@@ -1,13 +1,14 @@
 package com.chitraveerakhil.pathivedu.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.chitraveerakhil.pathivedu.cache.service.impl.LeaveCacheService;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.LeaveHistory;
 import com.chitraveerakhil.pathivedu.model.LeaveRequest;
@@ -28,6 +29,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 	@Autowired
 	LeaveHistoryRepository leaveHistoryRepository;
 
+	@Autowired
+	@Qualifier("leaveCacheService")
+	LeaveCacheService leaveCacheService;
+
 	@Override
 	public LeaveVo addLeave(PathiveduRequest<LeaveVo> leaveVo) {
 		LeaveRequest leaveRequest = populateLeaveRequest(leaveVo, new LeaveRequest());
@@ -44,12 +49,15 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Override
 	public List<LeaveVo> fetchLeavesByUser(long userId) {
-		List<LeaveVo> response = new ArrayList<>();
-		List<LeaveRequest> levaesList = leaveRequestRepository.retrievedByUserId(userId);
-		levaesList.forEach(leaveRequest -> {
-			LeaveVo leaveVo = extractResponse(leaveRequest);
-			response.add(leaveVo);
-		});
+		List<LeaveVo> response = leaveCacheService.getListByUser(userId);
+		if (response.isEmpty()) {
+			List<LeaveRequest> leaveList = leaveRequestRepository.retrievedByUserId(userId);
+			leaveList.forEach(leaveRequest -> {
+				LeaveVo leaveVo = extractResponse(leaveRequest);
+				response.add(leaveVo);
+			});
+			leaveCacheService.populateCacheByUser(response, userId);
+		}
 		return response;
 	}
 

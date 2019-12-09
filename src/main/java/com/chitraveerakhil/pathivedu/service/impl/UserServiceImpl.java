@@ -1,12 +1,13 @@
 package com.chitraveerakhil.pathivedu.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.chitraveerakhil.pathivedu.cache.service.CacheService;
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 import com.chitraveerakhil.pathivedu.helper.SecurePassword;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
@@ -26,6 +27,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDetailRepository userDetailRepository;
+
+	@Autowired
+	@Qualifier("userCacheService")
+	CacheService<UserProfile> userCacheService;
 
 	@Override
 	public UserProfile createAdmin(UserProfileAndPass userProfileAndPass) {
@@ -76,30 +81,37 @@ public class UserServiceImpl implements UserService {
 
 		UserProfile userProfile = new UserProfile();
 		extractUserProfileResponse(user, userProfile);
+
+		userCacheService.populateCache(userProfile, userProfile.getUserId());
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile fetchUserProfileById(long id) {
-		UserProfile userProfile = new UserProfile();
-		User user = userRepository.getOne(id);
-		extractUserProfileResponse(user, userProfile);
-
+		UserProfile userProfile = null;
+		userProfile = userCacheService.getFromCache(id);
+		if (userProfile == null) {
+			userProfile = new UserProfile();
+			User user = userRepository.getOne(id);
+			extractUserProfileResponse(user, userProfile);
+		}
 		return userProfile;
 	}
 
 	@Override
 	public List<UserProfile> fetchUserList() {
-		List<User> users = userRepository.findAll();
-		List<UserProfile> userProfileList = new ArrayList<>();
-		users.forEach(user -> {
-			UserProfile userProfile = new UserProfile();
-			extractUserProfileResponse(user, userProfile);
-			userProfileList.add(userProfile);
-		});
+		List<UserProfile> userProfileList = userCacheService.getList();
+		if (userProfileList.isEmpty()) {
+			List<User> users = userRepository.findAll();
+			users.forEach(user -> {
+				UserProfile userProfile = new UserProfile();
+				extractUserProfileResponse(user, userProfile);
+				userProfileList.add(userProfile);
+				userCacheService.populateCache(userProfile, userProfile.getUserId());
+			});
+		}
 		return userProfileList;
 	}
-
 
 	private UserDetail populateUserDetail(UserProfileAndPass userProfileAndPass) {
 		UserDetail userDetail = new UserDetail();
@@ -116,6 +128,7 @@ public class UserServiceImpl implements UserService {
 		UserProfile userProfile = new UserProfile();
 
 		extractUserProfileResponse(user, userProfile);
+		userCacheService.populateCache(userProfile, userProfile.getUserId());
 		return userProfile;
 	}
 
