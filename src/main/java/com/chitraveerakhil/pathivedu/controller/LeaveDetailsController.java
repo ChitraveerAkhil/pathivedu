@@ -17,7 +17,7 @@ import com.chitraveerakhil.pathivedu.vo.PathiveduRequest;
 import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 
 @RestController
-@RequestMapping("leaves")
+@RequestMapping("leaves/")
 public class LeaveDetailsController {
 
 	@Autowired

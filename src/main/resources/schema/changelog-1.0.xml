@@ -155,4 +155,16 @@
 		</addColumn>
 	</changeSet>
 
+	<changeSet id="1.3" author="akhil">
+		<dropColumn tableName="user_detail">
+			<column name="is_manager" type="BOOLEAN" />
+		</dropColumn>
+		<dropColumn tableName="user_detail">
+			<column name="is_admin" type="BOOLEAN" />
+		</dropColumn>
+		<addColumn tableName="user">
+			<column name="role" type="VARCHAR(10)" />
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>

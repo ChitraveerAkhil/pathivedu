@@ -13,7 +13,6 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
-
 @Data
 @Entity
 @Table(name = "USER_DETAIL")
@@ -39,12 +38,6 @@ public class UserDetail {
 
 	@Column(name = "MANAGER_ID")
 	private long managerId;
-
-	@Column(name = "IS_ADMIN")
-	private boolean isAdmin;
-
-	@Column(name = "IS_MANAGER")
-	private boolean isManager;
 
 	@Column(name = "SALARY")
 	private long salary;

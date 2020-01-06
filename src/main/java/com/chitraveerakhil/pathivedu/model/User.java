@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
+
 import lombok.Data;
 
 @Data
@@ -40,6 +42,19 @@ public class User {
 	@Column(name = "is_active")
 	private boolean isActive;
 
+	@Column(name = "role")
+	private String role = UtilConstants.ROLE_USER;
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private UserDetail userDetail;
+
+	public User(String email, String phoneNumber, String hash, int iterator) {
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.hash = hash;
+		this.iterator = iterator;
+	}
+
+	public User() {
+	}
 }

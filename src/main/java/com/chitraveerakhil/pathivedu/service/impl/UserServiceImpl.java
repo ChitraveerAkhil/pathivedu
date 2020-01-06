@@ -35,9 +35,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserProfile createAdmin(UserProfileAndPass userProfileAndPass) {
 		User user = populateUser(userProfileAndPass);
+		user.setRole(UtilConstants.ROLE_ADMIN);
 		UserDetail userDetail = populateUserDetail(userProfileAndPass);
-		userDetail.setAdmin(true);
-		userDetail.setManager(true);
 		UserProfile userProfile = saveUser(user, userDetail);
 		return userProfile;
 	}
@@ -46,23 +45,21 @@ public class UserServiceImpl implements UserService {
 	public UserProfile createManager(UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = null;
 		User user = populateUser(userProfileAndPass);
-		UserDetail userDetail = populateUserDetail(userProfileAndPass);
-		userDetail.setAdmin(false);
-		userDetail.setManager(true);
+		user.setRole(UtilConstants.ROLE_MANAGER);
 
+		UserDetail userDetail = populateUserDetail(userProfileAndPass);
 		userProfile = saveUser(user, userDetail);
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile addUser(UserProfileAndPass userProfileAndPass) {
-		User manager = userRepository.getOne(userProfileAndPass.getUserProfile().getManagerId());
+		User owner = userRepository.getOne(userProfileAndPass.getUserProfile().getManagerId());
 		UserProfile userProfile = null;
-		if (manager.getUserDetail().isManager() || manager.getUserDetail().isAdmin()) {
+		if (UtilConstants.ROLE_MANAGER.equals(owner.getRole()) || UtilConstants.ROLE_ADMIN.equals(owner.getRole())) {
 			User user = populateUser(userProfileAndPass);
+			user.setRole(UtilConstants.ROLE_USER);
 			UserDetail userDetail = populateUserDetail(userProfileAndPass);
-			userDetail.setAdmin(false);
-			userDetail.setManager(false);
 			userProfile = saveUser(user, userDetail);
 		}
 		return userProfile;

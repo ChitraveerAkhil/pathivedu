@@ -21,6 +21,13 @@ public class UtilConstants {
 	public static final String ENUM_APPROVED = "APPROVED";
 	public static final String ENUM_DENIED = "DENIED";
 	public static final String ENUM_PENDING = "PENDING";
+	public static final String PATHIVEDU_REALM = "PATHIVEDU_REALM";
+
+	public static final int ONE_DAY = 60 * 60 * 24;
+	public static final int THIRTY_DAYS = 60 * 60 * 24 * 30;
+	public static final String ROLE_ADMIN = "ADMIN";
+	public static final String ROLE_MANAGER = "MANAGER";
+	public static final String ROLE_USER = "USER";
 
 	public static String dateToStr(Date dob) {
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
