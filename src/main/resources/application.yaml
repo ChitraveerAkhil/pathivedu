@@ -22,3 +22,7 @@ spring:
 logging:
    level:
       org.hibernate.stat: 'true'
+security:
+  jwt:
+    secret: Sk=^Ecr3
+    expiry-time: 86400000

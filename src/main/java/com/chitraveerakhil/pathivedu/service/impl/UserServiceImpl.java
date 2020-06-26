@@ -1,5 +1,6 @@
 package com.chitraveerakhil.pathivedu.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.cache.service.CacheService;
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
+import com.chitraveerakhil.pathivedu.helper.ObjectValidator;
 import com.chitraveerakhil.pathivedu.helper.SecurePassword;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.User;
@@ -31,6 +33,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Qualifier("userCacheService")
 	CacheService<UserProfile> userCacheService;
+	
+	@Autowired
+	ObjectValidator validator;
 
 	@Override
 	public UserProfile createAdmin(UserProfileAndPass userProfileAndPass) {
@@ -98,16 +103,31 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserProfile> fetchUserList() {
 		List<UserProfile> userProfileList = userCacheService.getList();
-		if (userProfileList.isEmpty()) {
+		if (userProfileList == null) {
+			List<UserProfile> tempList = new ArrayList<>();
 			List<User> users = userRepository.findAll();
 			users.forEach(user -> {
 				UserProfile userProfile = new UserProfile();
 				extractUserProfileResponse(user, userProfile);
-				userProfileList.add(userProfile);
-				userCacheService.populateCache(userProfile, userProfile.getUserId());
+				tempList.add(userProfile);
+//				userCacheService.populateCache(userProfile, userProfile.getUserId());
 			});
+			userProfileList = tempList;     
 		}
 		return userProfileList;
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		User user = null;
+		if (validator.validateMail(username)) {
+			user = userRepository.findByEmail(username);
+		}
+
+		if (validator.validatePhoneNo(username)) {
+			user = userRepository.findByPhoneNumber(username);
+		}
+		return user;
 	}
 
 	private UserDetail populateUserDetail(UserProfileAndPass userProfileAndPass) {
@@ -151,4 +171,5 @@ public class UserServiceImpl implements UserService {
 		user.setIterator(Integer.valueOf(generatedPassword.get((UtilConstants.KEY_ITERATOR))));
 		user.setSalt(generatedPassword.get(UtilConstants.KEY_SALT));
 	}
+
 }

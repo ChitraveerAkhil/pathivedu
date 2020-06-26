@@ -29,6 +29,12 @@ public class UtilConstants {
 	public static final String ROLE_MANAGER = "MANAGER";
 	public static final String ROLE_USER = "USER";
 
+	public static final String SECRET = "SecretKeyToGenJWTs";
+	public static final long EXPIRATION_TIME = 864_000_000; // 10 days
+	public static final String TOKEN_PREFIX = "Bearer ";
+	public static final String HEADER_STRING = "Authorization";
+	public static final String LOGIN_URL = "/login";
+
 	public static String dateToStr(Date dob) {
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 		return dateFormat.format(dob);
