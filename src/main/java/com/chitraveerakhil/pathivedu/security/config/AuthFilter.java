@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
+
 @Component
 public class AuthFilter extends OncePerRequestFilter {
 	@Autowired
@@ -51,7 +53,7 @@ public class AuthFilter extends OncePerRequestFilter {
 	}
 
 	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
+		String headerAuth = request.getHeader(UtilConstants.AUTH_HEADER);
 
 		if (StringUtils.hasText(headerAuth)) {
 			return headerAuth;

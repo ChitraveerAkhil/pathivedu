@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 import com.chitraveerakhil.pathivedu.service.UserService;
 import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.vo.UserProfile;
@@ -26,7 +27,7 @@ public class UserController {
 	@PostMapping("createAdmin")
 	public PathiveduResponse<UserProfile> createAdmin(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.createAdmin(userProfileAndPass);
-		return new PathiveduResponse<UserProfile>(userProfile);
+		return new PathiveduResponse<UserProfile>(userProfile, UtilConstants.ADMIN_CREATED_RESPONSE);
 	}
 
 	@PostMapping("createManager")
@@ -34,7 +35,7 @@ public class UserController {
 		UserProfile userProfile = userService.createManager(userProfileAndPass);
 		PathiveduResponse<?> response = null;
 		if (userProfile != null) {
-			response = new PathiveduResponse<UserProfile>(userProfile);
+			response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.MANAGER_CREATED_RESPONSE);
 		} else {
 			response = new PathiveduResponse<String>("error", "Unable to create manager", "401",
 					"Manager can be created only by Admin");
@@ -47,7 +48,7 @@ public class UserController {
 		UserProfile userProfile = userService.addUser(userProfileAndPass);
 		PathiveduResponse<?> response = null;
 		if (userProfile != null) {
-			response = new PathiveduResponse<UserProfile>(userProfile);
+			response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.USER_CREATED_RESPONSE);
 		} else {
 			response = new PathiveduResponse<String>("error", "Unable to create user", "401",
 					"User can be created only by Admin or Manager");
@@ -58,9 +59,9 @@ public class UserController {
 	@PutMapping("update")
 	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.updateUser(userProfileAndPass);
-		return new PathiveduResponse<UserProfile>(userProfile);
+		return new PathiveduResponse<UserProfile>(userProfile, UtilConstants.USER_UPDATED_RESPONSE);
 	}
-	
+
 	@GetMapping("fetchById")
 	public PathiveduResponse<UserProfile> fetchUserProfile(@RequestParam long id) {
 		UserProfile userProfile = userService.fetchUserProfileById(id);

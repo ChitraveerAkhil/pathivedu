@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.cache.service.impl.LeaveCacheService;
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.LeaveHistory;
 import com.chitraveerakhil.pathivedu.model.LeaveRequest;
@@ -64,7 +65,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 	@Override
 	public String deleteLeave(PathiveduRequest<Long> request) {
 		leaveRequestRepository.deleteById(request.getData());
-		return null;
+		return UtilConstants.LEAVE_DELETED_RESPONSE;
 	}
 
 	private LeaveRequest populateLeaveRequest(PathiveduRequest<LeaveVo> leaveVo, LeaveRequest leaveRequest) {

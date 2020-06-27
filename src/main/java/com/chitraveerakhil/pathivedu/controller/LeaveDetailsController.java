@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 import com.chitraveerakhil.pathivedu.service.LeaveRequestService;
 import com.chitraveerakhil.pathivedu.vo.LeaveVo;
 import com.chitraveerakhil.pathivedu.vo.PathiveduRequest;
@@ -26,13 +27,13 @@ public class LeaveDetailsController {
 	@PostMapping
 	public PathiveduResponse<LeaveVo> requestLeave(@RequestBody PathiveduRequest<LeaveVo> toAddRequest) {
 		LeaveVo LeaveVo = leaveRequestService.addLeave(toAddRequest);
-		return new PathiveduResponse<>(LeaveVo);
+		return new PathiveduResponse<>(LeaveVo, UtilConstants.LEAVE_CREATED_RESPONSE);
 	}
 
 	@PutMapping
 	public PathiveduResponse<LeaveVo> editLeave(@RequestBody PathiveduRequest<LeaveVo> toEditRequest) {
 		LeaveVo LeaveVo = leaveRequestService.editLeave(toEditRequest);
-		return new PathiveduResponse<>(LeaveVo);
+		return new PathiveduResponse<>(LeaveVo, UtilConstants.LEAVE_UPDATED_RESPONSE);
 	}
 
 	@RequestMapping("fetchByUser")

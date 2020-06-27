@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.cache.service.impl.OverTimeCacheService;
+import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.OverTimeHistory;
 import com.chitraveerakhil.pathivedu.model.OverTimeRequest;
@@ -68,7 +69,7 @@ public class OverTimeRequestServiceImpl implements OverTimeRequestService {
 	public String deleteOverTime(PathiveduRequest<Long> request) {
 		overTimeRequestRepository.deleteById(request.getData());
 		overTimeCacheService.removeFromCache(request.getData());
-		return "Overtime request deleted";
+		return UtilConstants.OVERTIME_DELETED_RESPONSE;
 	}
 
 	private OverTimeRequest populateOverTimeRequest(PathiveduRequest<OverTimeVo> overTimeVo,

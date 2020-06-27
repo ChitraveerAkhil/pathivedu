@@ -18,22 +18,31 @@ public class UtilConstants {
 	public static final String STR_GET = "get";
 	public static final String STR_SET = "set";
 	public static final String STR_IS = "is";
+
 	public static final String ENUM_APPROVED = "APPROVED";
 	public static final String ENUM_DENIED = "DENIED";
 	public static final String ENUM_PENDING = "PENDING";
-	public static final String PATHIVEDU_REALM = "PATHIVEDU_REALM";
 
-	public static final int ONE_DAY = 60 * 60 * 24;
-	public static final int THIRTY_DAYS = 60 * 60 * 24 * 30;
 	public static final String ROLE_ADMIN = "ADMIN";
 	public static final String ROLE_MANAGER = "MANAGER";
 	public static final String ROLE_USER = "USER";
 
-	public static final String SECRET = "SecretKeyToGenJWTs";
-	public static final long EXPIRATION_TIME = 864_000_000; // 10 days
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
+	public static final String AUTH_HEADER = "Authorization";
 	public static final String LOGIN_URL = "/login";
+
+	public static final String LEAVE_CREATED_RESPONSE = "Leave Request Created Successfully";
+	public static final String LEAVE_UPDATED_RESPONSE = "Overtime Request Updated Successfully";
+	public static final String OVERTIME_CREATED_RESPONSE = "Leave Request Created Successfully";
+	public static final String OVERTIME_UPDATED_RESPONSE = "Overtime Request Updated Successfully";
+	public static final String ADMIN_CREATED_RESPONSE = "Admin Created Successfully";;
+	public static final String MANAGER_CREATED_RESPONSE = "Manager Created Successfully";;
+	public static final String USER_CREATED_RESPONSE = "User Created Successfully";
+	public static final String USER_UPDATED_RESPONSE = "User Updated Successfully";
+	public static final String LEAVE_DELETED_RESPONSE = "Leave Request Deleted";
+	public static final String OVERTIME_DELETED_RESPONSE = "Overtime Request Deleted";
+
+	public static final String MAIL_REGEX = "^(.+)@(.+)$";
+	public static final String MOBILE_REGEX = "\\d{10}";
 
 	public static String dateToStr(Date dob) {
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
