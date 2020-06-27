@@ -1,5 +1,7 @@
 package com.chitraveerakhil.pathivedu.vo;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 
 import org.springframework.data.redis.core.RedisHash;
@@ -8,7 +10,9 @@ import lombok.Data;
 
 @Data
 @RedisHash("over_time_vo")
-public class OverTimeVo {
+public class OverTimeVo implements Serializable {
+
+	private static final long serialVersionUID = 1140504089902869787L;
 
 	@Id
 	private long overTimeId;

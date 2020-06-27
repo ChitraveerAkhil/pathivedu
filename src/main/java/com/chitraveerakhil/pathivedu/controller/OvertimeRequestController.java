@@ -37,14 +37,13 @@ public class OvertimeRequestController {
 	}
 
 	@PutMapping
-	public PathiveduResponse<OverTimeVo> editLeave(@RequestBody PathiveduRequest<OverTimeVo> toEditRequest) {
+	public PathiveduResponse<OverTimeVo> editOverTime(@RequestBody PathiveduRequest<OverTimeVo> toEditRequest) {
 		OverTimeVo overtimeRequest = overTimeRequestService.editOverTime(toEditRequest);
-		return new PathiveduResponse<>(overtimeRequest);
+		return new PathiveduResponse<>(overtimeRequest, "Leave request updated");
 	}
 
 	@DeleteMapping
-	public PathiveduResponse<String> deleteLeave(@RequestParam("userId") PathiveduRequest<Long> id) {
-		String resp = overTimeRequestService.deleteOverTime(id);
-		return new PathiveduResponse<>(resp);
+	public PathiveduResponse<String> deleteOverTime(@RequestParam("userId") PathiveduRequest<Long> id) {
+		return new PathiveduResponse<>(overTimeRequestService.deleteOverTime(id), "204");
 	}
 }

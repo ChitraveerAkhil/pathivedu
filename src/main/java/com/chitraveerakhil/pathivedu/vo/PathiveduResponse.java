@@ -20,4 +20,17 @@ public class PathiveduResponse<T> {
 		this.data = data;
 	}
 
+	public PathiveduResponse(String msg) {
+		this.message = msg;
+	}
+
+	public PathiveduResponse(T data, String msg) {
+		this.message = msg;
+		this.data = data;
+	}
+
+	public PathiveduResponse(String msg, String code) {
+		this.message = msg;
+		this.code = code;
+	}
 }

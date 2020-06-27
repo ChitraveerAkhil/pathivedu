@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 
 import com.chitraveerakhil.pathivedu.cache.service.CacheService;
 import com.chitraveerakhil.pathivedu.vo.OverTimeVo;
 
+@Component("overTimeCacheService")
 public class OverTimeCacheService implements CacheService<OverTimeVo> {
 
 	private static final String CACHE_PREFIX = "overTimeCachePrefix";

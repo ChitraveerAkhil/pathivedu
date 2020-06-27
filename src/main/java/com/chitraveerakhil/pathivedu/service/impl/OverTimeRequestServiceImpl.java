@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.chitraveerakhil.pathivedu.cache.service.impl.OverTimeCacheService;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
 import com.chitraveerakhil.pathivedu.model.OverTimeHistory;
 import com.chitraveerakhil.pathivedu.model.OverTimeRequest;
@@ -27,6 +29,10 @@ public class OverTimeRequestServiceImpl implements OverTimeRequestService {
 	@Autowired
 	OverTimeHistoryRepository overTimeHistoryRepository;
 
+	@Autowired
+	@Qualifier("overTimeCacheService")
+	OverTimeCacheService overTimeCacheService;
+
 	@Override
 	public OverTimeVo addOverTime(PathiveduRequest<OverTimeVo> overTimeVo) {
 		OverTimeRequest overTimeRequest = populateOverTimeRequest(overTimeVo, new OverTimeRequest());
@@ -44,19 +50,25 @@ public class OverTimeRequestServiceImpl implements OverTimeRequestService {
 
 	@Override
 	public List<OverTimeVo> fetchOverTimesByUser(long userId) {
-		List<OverTimeVo> response = new ArrayList<>();
-		List<OverTimeRequest> levaesList = overTimeRequestRepository.retrievedByUserId(userId);
-		levaesList.forEach(overTimeRequest -> {
-			OverTimeVo overTimeVo = extractResponse(overTimeRequest);
-			response.add(overTimeVo);
-		});
+		List<OverTimeVo> response = overTimeCacheService.getListByUser(userId);
+		if (response == null) {
+			List<OverTimeVo> tempList = new ArrayList<>();
+			List<OverTimeRequest> overTimeList = overTimeRequestRepository.retrievedByUserId(userId);
+			overTimeList.forEach(overTimeRequest -> {
+				OverTimeVo overTimeVo = extractResponse(overTimeRequest);
+				tempList.add(overTimeVo);
+			});
+			response = tempList;
+			overTimeCacheService.populateCacheByUser(response, userId);
+		}
 		return response;
 	}
 
 	@Override
 	public String deleteOverTime(PathiveduRequest<Long> request) {
 		overTimeRequestRepository.deleteById(request.getData());
-		return null;
+		overTimeCacheService.removeFromCache(request.getData());
+		return "Overtime request deleted";
 	}
 
 	private OverTimeRequest populateOverTimeRequest(PathiveduRequest<OverTimeVo> overTimeVo,
@@ -79,6 +91,8 @@ public class OverTimeRequestServiceImpl implements OverTimeRequestService {
 		populateAndAddOverTimeHistory(overTimeRequest, overTimeVo);
 
 		OverTimeVo response = extractResponse(overTimeRequest);
+
+		overTimeCacheService.populateCache(response, response.getOverTimeId());
 		return response;
 	}
 
