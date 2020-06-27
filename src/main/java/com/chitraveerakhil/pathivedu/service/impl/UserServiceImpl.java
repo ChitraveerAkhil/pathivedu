@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Qualifier("userCacheService")
 	CacheService<UserProfile> userCacheService;
-	
+
 	@Autowired
 	ObjectValidator validator;
 
@@ -96,24 +96,20 @@ public class UserServiceImpl implements UserService {
 			userProfile = new UserProfile();
 			User user = userRepository.getOne(id);
 			extractUserProfileResponse(user, userProfile);
+			userCacheService.populateCache(userProfile, id);
 		}
 		return userProfile;
 	}
 
 	@Override
 	public List<UserProfile> fetchUserList() {
-		List<UserProfile> userProfileList = userCacheService.getList();
-		if (userProfileList == null) {
-			List<UserProfile> tempList = new ArrayList<>();
-			List<User> users = userRepository.findAll();
-			users.forEach(user -> {
-				UserProfile userProfile = new UserProfile();
-				extractUserProfileResponse(user, userProfile);
-				tempList.add(userProfile);
-//				userCacheService.populateCache(userProfile, userProfile.getUserId());
-			});
-			userProfileList = tempList;     
-		}
+		List<UserProfile> userProfileList = new ArrayList<>();
+		List<User> users = userRepository.findAll();
+		users.forEach(user -> {
+			UserProfile userProfile = new UserProfile();
+			extractUserProfileResponse(user, userProfile);
+			userProfileList.add(userProfile);
+		});
 		return userProfileList;
 	}
 

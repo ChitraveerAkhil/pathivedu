@@ -1,5 +1,7 @@
 package com.chitraveerakhil.pathivedu.vo;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 
 import org.springframework.data.redis.core.RedisHash;
@@ -8,7 +10,9 @@ import lombok.Data;
 
 @Data
 @RedisHash("user_profile")
-public class UserProfile {
+public class UserProfile implements Serializable {
+	
+	private static final long serialVersionUID = -6151628180119398969L;
 
 	@Id
 	private long userId;
