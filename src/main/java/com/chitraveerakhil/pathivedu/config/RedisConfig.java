@@ -40,6 +40,10 @@ public class RedisConfig extends CachingConfigurerSupport {
 		RedisStandaloneConfiguration conf = new RedisStandaloneConfiguration(REDIS_HOSTNAME, REDIS_PORT);
 		JedisClientConfiguration jedisClientConfiguration = JedisClientConfiguration.builder().usePooling().build();
 		JedisConnectionFactory factory = new JedisConnectionFactory(conf, jedisClientConfiguration);
+
+		factory.getPoolConfig().setMaxIdle(30);
+		factory.getPoolConfig().setMinIdle(10);
+
 		factory.afterPropertiesSet();
 		return factory;
 	}

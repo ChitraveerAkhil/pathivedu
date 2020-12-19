@@ -15,19 +15,19 @@ import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 @Component
 public class ObjectInitializer {
 
-	@Value("temp.user.firstname")
+	@Value("${temp.user.firstname}")
 	private String TEMP_FIRST_NAME;
 
-	@Value("temp.user.lastname")
+	@Value("${temp.user.lastname}")
 	private String TEMP_LAST_NAME;
 
-	@Value("temp.user.email")
+	@Value("${temp.user.email}")
 	private String TEMP_EMAIL;
 
-	@Value("temp.user.phoneNumber")
+	@Value("${temp.user.phoneNumber}")
 	private String TEMP_PHONE_NUMBER;
 
-	@Value("temp.user.pass")
+	@Value("${temp.user.pass}")
 	private String TEMP_USER_PASS;
 
 	Logger logger = Logger.getLogger(ObjectInitializer.class);

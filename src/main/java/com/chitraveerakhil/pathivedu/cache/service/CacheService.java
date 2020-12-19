@@ -2,17 +2,18 @@ package com.chitraveerakhil.pathivedu.cache.service;
 
 import java.util.List;
 
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface CacheService<T> {
 
-	T getFromCache(long id);
+	T getFromCache(long id) throws RedisConnectionFailureException;
 
-	T populateCache(T cache, long id);
+	T populateCache(T cache, long id) throws RedisConnectionFailureException;
 
-	List<T> getList();
+	List<T> getList() throws RedisConnectionFailureException;
 
-	void removeFromCache(long id);
+	void removeFromCache(long id) throws RedisConnectionFailureException;
 
 }

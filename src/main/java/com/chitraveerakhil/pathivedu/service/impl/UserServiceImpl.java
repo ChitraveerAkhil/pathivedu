@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.cache.service.CacheService;
@@ -24,6 +27,7 @@ import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 @Service
 public class UserServiceImpl implements UserService {
 
+	Logger Log = LoggerFactory.getLogger(UserServiceImpl.class);
 	@Autowired
 	UserRepository userRepository;
 
@@ -84,19 +88,32 @@ public class UserServiceImpl implements UserService {
 		UserProfile userProfile = new UserProfile();
 		extractUserProfileResponse(user, userProfile);
 
-		userCacheService.populateCache(userProfile, userProfile.getUserId());
+		try {
+			userCacheService.populateCache(userProfile, userProfile.getUserId());
+		} catch (RedisConnectionFailureException e) {
+			Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
+		}
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile fetchUserProfileById(long id) {
 		UserProfile userProfile = null;
-		userProfile = userCacheService.getFromCache(id);
+		try {
+			userProfile = userCacheService.getFromCache(id);
+		} catch (RedisConnectionFailureException e) {
+			Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
+		}
 		if (userProfile == null) {
 			userProfile = new UserProfile();
 			User user = userRepository.getOne(id);
 			extractUserProfileResponse(user, userProfile);
-			userCacheService.populateCache(userProfile, id);
+
+			try {
+				userCacheService.populateCache(userProfile, id);
+			} catch (RedisConnectionFailureException e) {
+				Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
+			}
 		}
 		return userProfile;
 	}
@@ -134,6 +151,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private UserProfile saveUser(User user, UserDetail userDetail) {
+		user.setActive(true);
 		user.setUserDetail(userDetail);
 		userDetail.setUser(user);
 		user = userRepository.save(user);
@@ -141,7 +159,11 @@ public class UserServiceImpl implements UserService {
 		UserProfile userProfile = new UserProfile();
 
 		extractUserProfileResponse(user, userProfile);
-		userCacheService.populateCache(userProfile, userProfile.getUserId());
+		try {
+			userCacheService.populateCache(userProfile, userProfile.getUserId());
+		} catch (RuntimeException e) {
+			Log.warn(e.getMessage());
+		}
 		return userProfile;
 	}
 
@@ -151,6 +173,22 @@ public class UserServiceImpl implements UserService {
 
 		userProfileFromUserPopulator.populateObject(user, userProfile);
 		userProfileFromUserDetailPopulator.populateObject(user.getUserDetail(), userProfile);
+
+		setRole(userProfile, user);
+	}
+
+	private void setRole(UserProfile userProfile, User user) {
+		String role = user.getRole();
+		switch (role) {
+		case UtilConstants.ROLE_ADMIN:
+			userProfile.setAdmin(true);
+			break;
+		case UtilConstants.ROLE_MANAGER:
+			userProfile.setManager(true);
+			break;
+		default:
+			break;
+		}
 	}
 
 	private User populateUser(UserProfileAndPass userProfileAndPass) {

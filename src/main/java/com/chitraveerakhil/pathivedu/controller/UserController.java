@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
@@ -18,7 +18,7 @@ import com.chitraveerakhil.pathivedu.vo.UserProfile;
 import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 
 @RestController
-@RequestMapping("user/")
+@RequestMapping("users/")
 public class UserController {
 
 	@Autowired
@@ -43,8 +43,8 @@ public class UserController {
 		return response;
 	}
 
-	@PostMapping("add")
-	public PathiveduResponse<?> addUser(@RequestBody UserProfileAndPass userProfileAndPass) {
+	@PostMapping()
+	public PathiveduResponse<?> add(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.addUser(userProfileAndPass);
 		PathiveduResponse<?> response = null;
 		if (userProfile != null) {
@@ -56,21 +56,21 @@ public class UserController {
 		return response;
 	}
 
-	@PutMapping("update")
-	public PathiveduResponse<UserProfile> updateUser(@RequestBody UserProfileAndPass userProfileAndPass) {
+	@PutMapping()
+	public PathiveduResponse<UserProfile> update(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.updateUser(userProfileAndPass);
 		return new PathiveduResponse<UserProfile>(userProfile, UtilConstants.USER_UPDATED_RESPONSE);
 	}
 
-	@GetMapping("fetchById")
-	public PathiveduResponse<UserProfile> fetchUserProfile(@RequestParam long id) {
+	@GetMapping("{id}")
+	public PathiveduResponse<UserProfile> get(@PathVariable Long id) {
 		UserProfile userProfile = userService.fetchUserProfileById(id);
 
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 
 	@GetMapping("fetchAll")
-	public PathiveduResponse<List<UserProfile>> fetchAllUsers() {
+	public PathiveduResponse<List<UserProfile>> fetchUsers() {
 		List<UserProfile> userList = userService.fetchUserList();
 		return new PathiveduResponse<List<UserProfile>>(userList);
 
