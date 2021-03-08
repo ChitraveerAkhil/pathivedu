@@ -41,7 +41,7 @@ public class UtilConstants {
 	public static final String LEAVE_DELETED_RESPONSE = "Leave Request Deleted";
 	public static final String OVERTIME_DELETED_RESPONSE = "Overtime Request Deleted";
 
-	public static final String MAIL_REGEX = "^(.+)@(.+)$";
+	public static final String MAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 	public static final String MOBILE_REGEX = "\\d{10}";
 
 	public static String dateToStr(Date dob) {

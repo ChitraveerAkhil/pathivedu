@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class JwtResponse {
+public class UserToken {
 	
 	private Long id;
 	private String token;

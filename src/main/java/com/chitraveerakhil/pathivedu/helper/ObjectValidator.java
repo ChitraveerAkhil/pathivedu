@@ -9,7 +9,7 @@ import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 @Component
 public class ObjectValidator {
 
-	public boolean validateMail(String email) {
+	public boolean validateMailId(String email) {
 		return Pattern.compile(UtilConstants.MAIL_REGEX).matcher(email).matches();
 	}
 	

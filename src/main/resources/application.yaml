@@ -31,5 +31,5 @@ temp:
     firstname: test
     lastname: user
     email: test@test.com
-    phoneNumber: 0000000000
+    phoneNumber: 1234567890
     pass: pass

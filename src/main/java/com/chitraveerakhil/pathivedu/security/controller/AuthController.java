@@ -21,7 +21,7 @@ import com.chitraveerakhil.pathivedu.model.User;
 import com.chitraveerakhil.pathivedu.security.config.AuthTokenUtil;
 import com.chitraveerakhil.pathivedu.security.model.AuthUserDetails;
 import com.chitraveerakhil.pathivedu.security.model.JwtRequest;
-import com.chitraveerakhil.pathivedu.security.model.JwtResponse;
+import com.chitraveerakhil.pathivedu.security.model.UserToken;
 import com.chitraveerakhil.pathivedu.service.UserService;
 
 @RestController
@@ -50,7 +50,7 @@ public class AuthController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(
-				new JwtResponse(userDetails.getId(), token, userDetails.getUsername(), userDetails.getEmail(), roles));
+				new UserToken(userDetails.getId(), token, userDetails.getUsername(), userDetails.getEmail(), roles));
 	}
 
 	private Authentication authenticate(User user, String password) throws Exception {

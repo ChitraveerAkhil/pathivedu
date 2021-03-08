@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByUsername(String username) {
 		User user = null;
-		if (validator.validateMail(username)) {
+		if (validator.validateMailId(username)) {
 			user = userRepository.findByEmail(username);
 		}
 

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @RedisHash("user_profile")
