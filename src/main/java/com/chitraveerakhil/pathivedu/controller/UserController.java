@@ -3,6 +3,7 @@ package com.chitraveerakhil.pathivedu.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.chitraveerakhil.pathivedu.vo.PathiveduResponse;
 import com.chitraveerakhil.pathivedu.vo.UserProfile;
 import com.chitraveerakhil.pathivedu.vo.UserProfileAndPass;
 
+@CrossOrigin
 @RestController
 @RequestMapping("users/")
 public class UserController {
@@ -69,7 +71,7 @@ public class UserController {
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 
-	@GetMapping("fetchAll")
+	@GetMapping()
 	public PathiveduResponse<List<UserProfile>> fetchUsers() {
 		List<UserProfile> userList = userService.fetchUserList();
 		return new PathiveduResponse<List<UserProfile>>(userList);
