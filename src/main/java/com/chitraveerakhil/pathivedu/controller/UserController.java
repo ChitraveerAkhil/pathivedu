@@ -36,12 +36,7 @@ public class UserController {
 	public PathiveduResponse<?> createManager(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.createManager(userProfileAndPass);
 		PathiveduResponse<?> response = null;
-		if (userProfile != null) {
-			response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.MANAGER_CREATED_RESPONSE);
-		} else {
-			response = new PathiveduResponse<String>("error", "Unable to create manager", "401",
-					"Manager can be created only by Admin");
-		}
+		response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.MANAGER_CREATED_RESPONSE);
 		return response;
 	}
 
@@ -49,12 +44,7 @@ public class UserController {
 	public PathiveduResponse<?> add(@RequestBody UserProfileAndPass userProfileAndPass) {
 		UserProfile userProfile = userService.addUser(userProfileAndPass);
 		PathiveduResponse<?> response = null;
-		if (userProfile != null) {
-			response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.USER_CREATED_RESPONSE);
-		} else {
-			response = new PathiveduResponse<String>("error", "Unable to create user", "401",
-					"User can be created only by Admin or Manager");
-		}
+		response = new PathiveduResponse<UserProfile>(userProfile, UtilConstants.USER_CREATED_RESPONSE);
 		return response;
 	}
 
@@ -67,7 +57,6 @@ public class UserController {
 	@GetMapping("{id}")
 	public PathiveduResponse<UserProfile> get(@PathVariable Long id) {
 		UserProfile userProfile = userService.fetchUserProfileById(id);
-
 		return new PathiveduResponse<UserProfile>(userProfile);
 	}
 
@@ -75,6 +64,5 @@ public class UserController {
 	public PathiveduResponse<List<UserProfile>> fetchUsers() {
 		List<UserProfile> userList = userService.fetchUserList();
 		return new PathiveduResponse<List<UserProfile>>(userList);
-
 	}
 }

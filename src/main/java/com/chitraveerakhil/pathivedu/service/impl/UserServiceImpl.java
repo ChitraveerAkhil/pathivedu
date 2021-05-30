@@ -1,18 +1,19 @@
 package com.chitraveerakhil.pathivedu.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 
 import com.chitraveerakhil.pathivedu.cache.service.CacheService;
+import com.chitraveerakhil.pathivedu.constants.StringUtils;
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
+import com.chitraveerakhil.pathivedu.exceptions.PathiveduRestException;
 import com.chitraveerakhil.pathivedu.helper.ObjectValidator;
 import com.chitraveerakhil.pathivedu.helper.SecurePassword;
 import com.chitraveerakhil.pathivedu.helper.VoPopulator;
@@ -52,31 +53,36 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserProfile createManager(UserProfileAndPass userProfileAndPass) {
-		UserProfile userProfile = null;
+		User owner = userRepository.getOne(userProfileAndPass.getUserProfile().getManagerId());
+		if (StringUtils.equalsIgnoreCase(UtilConstants.ROLE_ADMIN, owner.getUserDetail().getDesignation()))
+			throw new PathiveduRestException(403, "User can be created only by Admin");
 		User user = populateUser(userProfileAndPass);
 		user.setRole(UtilConstants.ROLE_MANAGER);
 
 		UserDetail userDetail = populateUserDetail(userProfileAndPass);
-		userProfile = saveUser(user, userDetail);
+		UserProfile userProfile = saveUser(user, userDetail);
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile addUser(UserProfileAndPass userProfileAndPass) {
 		User owner = userRepository.getOne(userProfileAndPass.getUserProfile().getManagerId());
-		UserProfile userProfile = null;
-		if (UtilConstants.ROLE_MANAGER.equals(owner.getRole()) || UtilConstants.ROLE_ADMIN.equals(owner.getRole())) {
-			User user = populateUser(userProfileAndPass);
-			user.setRole(UtilConstants.ROLE_USER);
-			UserDetail userDetail = populateUserDetail(userProfileAndPass);
-			userProfile = saveUser(user, userDetail);
-		}
+		if (StringUtils.equalsIgnoreCase(UtilConstants.ROLE_ADMIN, owner.getUserDetail().getDesignation())
+				|| StringUtils.equalsIgnoreCase(UtilConstants.ROLE_MANAGER,
+						owner.getUserDetail().getDesignation()))
+			throw new PathiveduRestException(403, "User can be created only by Admin or Manager");
+		User user = populateUser(userProfileAndPass);
+		user.setRole(UtilConstants.ROLE_USER);
+		UserDetail userDetail = populateUserDetail(userProfileAndPass);
+		UserProfile userProfile = saveUser(user, userDetail);
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile updateUser(UserProfileAndPass userProfileAndPass) {
 		User user = userRepository.findById(userProfileAndPass.getUserProfile().getUserId()).get();
+		if (user == null)
+			throw new PathiveduRestException(412, "User not found");
 		user = populateUser(userProfileAndPass);
 		user.setId(userProfileAndPass.getUserProfile().getUserId());
 		UserDetail userDetail = user.getUserDetail();
@@ -85,48 +91,30 @@ public class UserServiceImpl implements UserService {
 		userDetail.setUser(user);
 		user = userRepository.save(user);
 
-		UserProfile userProfile = new UserProfile();
-		extractUserProfileResponse(user, userProfile);
-
-		try {
-			userCacheService.populateCache(userProfile, userProfile.getUserId());
-		} catch (RedisConnectionFailureException e) {
-			Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
-		}
+		UserProfile userProfile = createUserProfile(user);
+		userCacheService.populateCache(userProfile, userProfile.getUserId());
 		return userProfile;
 	}
 
 	@Override
 	public UserProfile fetchUserProfileById(long id) {
 		UserProfile userProfile = null;
-		try {
-			userProfile = userCacheService.getFromCache(id);
-		} catch (RedisConnectionFailureException e) {
-			Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
-		}
+		userProfile = userCacheService.getFromCache(id);
 		if (userProfile == null) {
-			userProfile = new UserProfile();
 			User user = userRepository.getOne(id);
-			extractUserProfileResponse(user, userProfile);
-
-			try {
-				userCacheService.populateCache(userProfile, id);
-			} catch (RedisConnectionFailureException e) {
-				Log.warn("Redis server is not connected for caching " + e.getLocalizedMessage());
-			}
+			if (user == null)
+				throw new PathiveduRestException(412, "User not found");
+			userProfile = createUserProfile(user);
+			userCacheService.populateCache(userProfile, id);
 		}
 		return userProfile;
 	}
 
 	@Override
 	public List<UserProfile> fetchUserList() {
-		List<UserProfile> userProfileList = new ArrayList<>();
 		List<User> users = userRepository.findAll();
-		users.forEach(user -> {
-			UserProfile userProfile = new UserProfile();
-			extractUserProfileResponse(user, userProfile);
-			userProfileList.add(userProfile);
-		});
+		List<UserProfile> userProfileList = users.stream().map(user -> createUserProfile(user))
+				.collect(Collectors.toList());
 		return userProfileList;
 	}
 
@@ -156,14 +144,14 @@ public class UserServiceImpl implements UserService {
 		userDetail.setUser(user);
 		user = userRepository.save(user);
 
-		UserProfile userProfile = new UserProfile();
+		UserProfile userProfile = createUserProfile(user);
+		userCacheService.populateCache(userProfile, userProfile.getUserId());
+		return userProfile;
+	}
 
+	private UserProfile createUserProfile(User user) {
+		UserProfile userProfile = new UserProfile();
 		extractUserProfileResponse(user, userProfile);
-		try {
-			userCacheService.populateCache(userProfile, userProfile.getUserId());
-		} catch (RuntimeException e) {
-			Log.warn(e.getMessage());
-		}
 		return userProfile;
 	}
 
@@ -205,5 +193,4 @@ public class UserServiceImpl implements UserService {
 		user.setIterator(Integer.valueOf(generatedPassword.get((UtilConstants.KEY_ITERATOR))));
 		user.setSalt(generatedPassword.get(UtilConstants.KEY_SALT));
 	}
-
 }

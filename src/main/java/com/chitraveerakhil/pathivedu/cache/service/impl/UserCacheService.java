@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
 
 import com.chitraveerakhil.pathivedu.cache.service.CacheService;
+import com.chitraveerakhil.pathivedu.exceptions.PathiveduCachingException;
 import com.chitraveerakhil.pathivedu.vo.UserProfile;
 
 @Component("userCacheService")
@@ -22,22 +22,22 @@ public class UserCacheService implements CacheService<UserProfile> {
 
 	@Override
 	@Cacheable(cacheNames = "userCache", key = "T(com.chitraveerakhil.pathivedu.cache.service.impl.UserCacheService).getCacheKey(#id)")
-	public UserProfile getFromCache(long id) throws RedisConnectionFailureException {
+	public UserProfile getFromCache(long id) throws PathiveduCachingException {
 		return null;
 	}
 
 	@CacheEvict(cacheNames = "userCache", key = "T(com.chitraveerakhil.pathivedu.cache.service.impl.UserCacheService).getCacheKey(#id)")
-	public void removeFromCache(String relevant) throws RedisConnectionFailureException {
+	public void removeFromCache(String relevant) throws PathiveduCachingException {
 	}
 
 	@Override
 	@CachePut(cacheNames = "userCache", key = "T(com.chitraveerakhil.pathivedu.cache.service.impl.UserCacheService).getCacheKey(#id)")
-	public UserProfile populateCache(UserProfile cache, long id) throws RedisConnectionFailureException {
+	public UserProfile populateCache(UserProfile cache, long id) throws PathiveduCachingException {
 		return cache;
 	}
 
 	@Override
-	public List<UserProfile> getList() throws RedisConnectionFailureException {
+	public List<UserProfile> getList() throws PathiveduCachingException {
 		// TODO Auto-generated method stub
 		return null;
 	}
