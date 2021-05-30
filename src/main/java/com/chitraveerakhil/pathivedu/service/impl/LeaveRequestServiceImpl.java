@@ -2,6 +2,7 @@ package com.chitraveerakhil.pathivedu.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,10 +54,8 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 		List<LeaveVo> response = leaveCacheService.getListByUser(userId);
 		if (response.isEmpty()) {
 			List<LeaveRequest> leaveList = leaveRequestRepository.retrievedByUserId(userId);
-			leaveList.forEach(leaveRequest -> {
-				LeaveVo leaveVo = extractResponse(leaveRequest);
-				response.add(leaveVo);
-			});
+			response = leaveList.stream().map(leaveRequest -> extractResponse(leaveRequest))
+					.collect(Collectors.toList());
 			leaveCacheService.populateCacheByUser(response, userId);
 		}
 		return response;
@@ -74,10 +73,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 		leaveRequest = requestPopulator.populateObject(leaveVo.getData(), leaveRequest);
 		leaveRequest.setLastUpdate(new Date());
 		leaveRequest.setStatus(RequestStatus.PENDING);
-		if (leaveVo.getData().getLeaveStatus() != null) {
+		if (leaveVo.getData() != null && leaveVo.getData().getLeaveStatus() != null) {
 			leaveRequest.setStatus(Enum.valueOf(RequestStatus.class, leaveVo.getData().getLeaveStatus()));
 		}
-		if (leaveVo.getData().getLeaveType() != null) {
+		if (leaveVo.getData() != null && leaveVo.getData().getLeaveType() != null) {
 			leaveRequest.setLeaveType(Enum.valueOf(LeaveType.class, leaveVo.getData().getLeaveStatus()));
 		}
 		return leaveRequest;
