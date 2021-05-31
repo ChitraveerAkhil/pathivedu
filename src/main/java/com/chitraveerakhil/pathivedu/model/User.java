@@ -12,9 +12,11 @@ import javax.persistence.Table;
 
 import com.chitraveerakhil.pathivedu.constants.UtilConstants;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "USER")
 public class User {
