@@ -77,5 +77,6 @@ public class ObjectVoTest {
 		assertEquals(userProfile.getResidentLocality(), detail.getResidentLocality());
 		assertEquals(userProfile.getSalary(), detail.getSalary());
 		assertEquals(userProfile.getUserId(), detail.getUser().getId());
+		assertEquals(userProfile.isActive(),user.isActive());
 	}
 }
