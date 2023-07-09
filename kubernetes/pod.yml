@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathivedu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pathivedu
+  template:
+    metadata:
+      labels:
+        app: pathivedu
+    spec:
+      containers:
+        - name: pathivedu
+          image: pathivedu:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
